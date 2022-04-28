@@ -6,10 +6,33 @@ const useWordle = (solution) => {
   const [guesses, setGuesses] = useState([]); // each guess is an array
   const [history, setHistory] = useState(["craft", "raise"]); // each guess is a string
   const [isCorrect, setIsCorrect] = useState(false);
+
   const formatGuess = () => {
-    console.log("Formatting the guess - " + currentGuess);
+    let solutionArray = [...solution];
+    let formattedGuess = [...currentGuess].map((l) => {
+      return { key: l, color: "grey" };
+    });
+
+    // find any green letters
+    formattedGuess.forEach((l, i) => {
+      if (solutionArray[i] === l.key) {
+        formattedGuess[i].color = "green";
+        solutionArray[i] = null;
+      }
+    });
+
+    // find any yellow matches
+    formattedGuess.forEach((l, i) => {
+      if (solutionArray.includes(l.key) && l.color !== "green") {
+        formattedGuess[i].color = "yellow";
+        solutionArray[solutionArray.indexOf(l.key)] = null;
+      }
+    });
+    return formattedGuess;
   };
+
   const addNewGuess = () => {};
+
   const handleKeyup = ({ key }) => {
     if (key === "Enter") {
       // only add guess if turn is less than 5
@@ -27,7 +50,8 @@ const useWordle = (solution) => {
         console.log("Word must be 5 characters long");
         return;
       }
-      formatGuess();
+      const formatted = formatGuess();
+      console.log(formatted);
     }
     if (key === "Backspace") {
       setCurrentGuess((prev) => {

@@ -18,7 +18,7 @@ export default function Row({ guess, currentGuess }) {
   if (currentGuess) {
     let letters = currentGuess.split("");
     return (
-      <div className="row curent">
+      <div className="row current">
         {letters.map((letter, i) => {
           return (
             <div key={i} className="filled">
